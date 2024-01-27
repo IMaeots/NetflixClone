@@ -28,6 +28,8 @@ class HomeViewController: UIViewController {
         
         let headerView = HomeHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTable.tableHeaderView = headerView
+        
+        getTrendingMovies()
     }
     
     private func configureNavBar() {
@@ -48,6 +50,20 @@ class HomeViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         homeFeedTable.frame = view.bounds
+    }
+    
+    private func getTrendingMovies() {
+        APICaller.shared.getTrendingMovies { result in
+            DispatchQueue.main.async {
+                switch result {
+                    case .failure(let error):
+                        print("Failure getting trending movies: \(error)")
+                    case .success(let data):
+                        // Handle successful response and process data.
+                        print("API Call Result: \(data)")
+                }
+            }
+        }
     }
 }
 
