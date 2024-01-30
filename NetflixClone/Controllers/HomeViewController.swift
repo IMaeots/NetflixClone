@@ -9,7 +9,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    let sectionTitles: [String] = ["Trending Movies", "Popular", "Trending Tv", "Upcoming Movies", "Top Rated"]
+    let sectionTitles: [String] = ["Trending Movies", "Trending Tv", "Popular", "Upcoming Movies", "Top Rated"]
     
     private let homeFeedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -29,7 +29,7 @@ class HomeViewController: UIViewController {
         let headerView = HomeHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTable.tableHeaderView = headerView
         
-        getTrendingMovies()
+        fetchData()
     }
     
     private func configureNavBar() {
@@ -52,16 +52,53 @@ class HomeViewController: UIViewController {
         homeFeedTable.frame = view.bounds
     }
     
-    private func getTrendingMovies() {
+    private func fetchData() {
         APICaller.shared.getTrendingMovies { result in
-            DispatchQueue.main.async {
-                switch result {
-                    case .failure(let error):
-                        print("Failure getting trending movies: \(error)")
-                    case .success(let data):
-                        // Handle successful response and process data.
-                        print("API Call Result: \(data)")
-                }
+            switch result {
+                case .failure(let error):
+                    print("Failure getting trending movies: \(error)")
+                case .success(let data):
+                    print("API Call Result: \(data)")
+            }
+        }
+        
+        APICaller.shared.getTrendingTvShows { result in
+            switch result {
+                case .failure(let error):
+                    print("Failure getting trending movies: \(error)")
+                case .success(let data):
+                    // Handle successful response and process data.
+                    print("API Call Result: \(data)")
+            }
+        }
+        
+        APICaller.shared.getPopularMovies { result in
+            switch result {
+                case .failure(let error):
+                    print("Failure getting trending movies: \(error)")
+                case .success(let data):
+                    // Handle successful response and process data.
+                    print("API Call Result: \(data)")
+            }
+        }
+        
+        APICaller.shared.getUpcomingMovies { result in
+            switch result {
+                case .failure(let error):
+                    print("Failure getting trending movies: \(error)")
+                case .success(let data):
+                    // Handle successful response and process data.
+                    print("API Call Result: \(data)")
+            }
+        }
+        
+        APICaller.shared.getTopRatedMovies { result in
+            switch result {
+                case .failure(let error):
+                    print("Failure getting trending movies: \(error)")
+                case .success(let data):
+                    // Handle successful response and process data.
+                    print("API Call Result: \(data)")
             }
         }
     }
@@ -100,7 +137,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         header.textLabel?.frame = CGRect(x: header.bounds.origin.x + 20, y: header.bounds.origin.y, width: 100, height: header.bounds.height)
         header.textLabel?.textColor = .white
         
-        header.textLabel?.text = header.textLabel?.text?.capitalized
+        header.textLabel?.text = header.textLabel?.text?.capitalizeFirstLetter()
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
